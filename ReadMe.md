@@ -309,7 +309,7 @@ Remember to set a secure `SECRET_KEY` environment variable rather than using the
 
 ## Support
 
-For any issues or questions regarding the installation, configuration, or use of Web Ledger Manager, please contact the ChatDev support team. You can also submit a support request form accessible from within the application. We are committed to helping you optimize your ledger management workflows.
+XXXXXX
 
 ---
 
