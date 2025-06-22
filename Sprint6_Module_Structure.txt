@@ -1,0 +1,57 @@
+zproject-root/
+│
+│──ChatChainConfig.json
+│──gunicorn.sh
+│──main.py
+│──manual.md
+│──meta.txt
+│──PhaseConfig.json
+│──requirements.txt
+│──RoleConfig.json
+│──WebLedger.prompt
+│
+├── backend/
+│   ├── auth/
+│   │      auth_api.py              // ユーザー認証・セッション管理API（従来の user_management.py など統合）
+│   │      user_management.py       // ユーザー、ロール管理の処理
+│   │
+│   ├── master_management/
+│   │      master_management_api.py // 統合マスタ管理API（MASTER_TYPES, MASTER_FIELD_DEFINITIONS, UNIFIED_MASTER_RECORDS）
+│   │      master_field_service.py  // マスタ定義（項目）の検証・管理ロジック
+│   │      dynamic_ledger_definition.py // 統合マスタのうち、台帳定義 (master_name='Ledger') を取得し動的フォーム生成支援
+│   │
+│   ├── ledger_transaction/
+│   │      ledger_manager.py        // 台帳運用データ（LEDGER_RECORDS）のCRUD処理
+│   │      ledger_history.py        // 台帳更新履歴（LEDGER_HISTORY）の管理
+│   │      audit_logs.py            // 監査ログ（AUDIT_LOGS）の管理
+│   │
+│   ├── excel_import/
+│   │      excel_importer.py        // 動的カラムマッピング・強化されたエラーチェックでExcelデータを台帳へインポート
+│   │
+│   ├── report_dashboard/
+│   │      report_controller.py     // ユーザー指定のフィルタ・集計でレポートデータ取得API
+│   │      report_generator.py      // レポート生成処理（テキスト集計＋グラフデータ生成）
+│   │      export_utils.py          // レポートデータのエクスポート処理（CSV, Excel, PDF等）
+│   │
+│   ├── ai_ml_integration/
+│   │      ai_ml_integration.py     // 生成AIのプロンプト最適化、MLモデルのロード、予測処理を実装
+│   │
+│   ├── performance_optimization/
+│   │      async_task_manager.py    // Celery等による非同期タスク管理
+│   │      cache_manager.py         // キャッシュ管理
+│   │      query_optimizer.py       // SQLクエリ最適化支援
+│   │      response_time_logger.py  // APIレスポンス時間のログ・モニタリング
+│   │
+│   └── api_util/
+│          api_util.py             // 共通の入力検証、パラメータ化クエリ、キャッシュ処理などのユーティリティ
+│
+└── frontend/
+     ├── ledger_form/
+     │      index.html              // 台帳入力フォーム（動的台帳定義に基づく）
+     │      style.css
+     │      script.js               // 台帳定義取得API連携、フォーム生成、入力検証
+     │
+     └── report_dashboard_ui/
+          dashboard.html         // レポートダッシュボード画面
+          dashboard.css
+          dashboard.js           // フィルタ条件入力、API連携、Chart.jsでのグラフ描画

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Master Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- 共通スタイル -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- マスター管理専用スタイル -->
+  <link rel="stylesheet" href="/static/css/unified_master_manager.css">
+</head>
+<body>
+  <div id="unifiedMasterApp">
+    <!-- ヘッダー -->
+    <app-header :texts="headerTexts"
+                @toggle-language="toggleLanguage"
+                @logout-success="handleLogout">
+    </app-header>
+    
+    <div class="container mt-4">
+      <h1>[[ texts.ledger_master_management ]]</h1>
+      
+      <!-- 新規マスター追加フォーム -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3>[[ texts.add_new_master ]]</h3>
+          <form @submit.prevent="addMaster">
+            <!-- マスタータイプ選択：ラジオボタン -->
+            <div class="mb-3">
+              <label class="form-label">[[ texts.create_master_prompt ]]</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input"
+                         type="radio"
+                         id="radioLedger"
+                         value="ledger"
+                         v-model="newMaster.master_type"
+                         @change="onMasterTypeChange"
+                         required>
+                  <label class="form-check-label" for="radioLedger">
+                    [[ texts.ledger_master_label ]]
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input"
+                         type="radio"
+                         id="radioNonLedger"
+                         value="nonledger"
+                         v-model="newMaster.master_type"
+                         @change="onMasterTypeChange"
+                         required>
+                  <label class="form-check-label" for="radioNonLedger">
+                    [[ texts.nonledger_master_label ]]
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ledger の新規作成フォーム -->
+            <div v-if="newMaster.master_type.toLowerCase() === 'ledger'">
+              <div class="mb-3">
+                <label for="newMasterName" class="form-label">[[ texts.ledger_name ]]</label>
+                <input type="text"
+                       v-model="newMaster.ledger_name"
+                       class="form-control"
+                       id="newMasterName"
+                       required 
+                       :placeholder="newMasterColumns.length === 0 ? texts.ledger_name_placeholder : ''">
+              </div>
+              <h5>[[ texts.column_settings ]] (New Ledger Master)</h5>
+              <table class="table table-bordered">
+                <thead class="table-blue-header">
+                  <tr>
+                    <th>[[ texts.column_name ]]</th>
+                    <th>[[ texts.data_type ]]</th>
+                    <th>[[ texts.max_length ]]</th>
+                    <th>[[ texts.display_order ]]</th>
+                    <th>[[ texts.actions ]]</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(column, index) in newMasterColumns" :key="index">
+                    <td>
+                      <input type="text"
+                             v-model="column.column_name"
+                             class="form-control"
+                             :placeholder="texts.column_name_placeholder"
+                             required>
+                    </td>
+                    <td>
+                      <select v-model="column.data_type" class="form-select">
+                        <option value="text">[[ texts.text ]]</option>
+                        <option value="number">[[ texts.number ]]</option>
+                        <option value="real">[[ texts.real ]]</option>
+                        <option value="date">[[ texts.date ]]</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="number"
+                             v-model="column.max_length"
+                             class="form-control"
+                             min="1"
+                             :placeholder="texts.max_length_placeholder">
+                    </td>
+                    <td>
+                      <input type="number"
+                             v-model="column.display_order"
+                             class="form-control"
+                             min="1"
+                             :placeholder="texts.display_order_placeholder">
+                    </td>
+                    <td>
+                      <button type="button"
+                              class="btn btn-danger btn-sm"
+                              @click="removeColumn(index)">[[ texts.delete ]]
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button type="button" class="btn btn-secondary" @click="addColumn">
+                [[ texts.add_column ]]
+              </button>
+              <button type="submit" class="btn btn-primary ms-2">[[ texts.save ]]</button>
+            </div>
+
+            <!-- NonLedger の新規作成フォーム -->
+            <div v-else-if="newMaster.master_type.toLowerCase() === 'nonledger'">
+              <div class="mb-3">
+                <label for="newMasterName" class="form-label">[[ texts.ledger_name ]]</label>
+                <input type="text"
+                      v-model="newMaster.ledger_name"
+                      class="form-control"
+                      id="newMasterName"
+                      required
+                      :placeholder="texts.ledger_name_placeholder">
+              </div>
+              <h5>[[ texts.column_settings ]] (New Non-Ledger Master)</h5>
+              <table class="table table-bordered">
+                <thead class="table-blue-header table-fixed-columns">
+                  <tr>
+                    <th>[[ texts.code ]]</th>
+                    <th>[[ texts.code_name ]]</th>
+                    <th>[[ texts.code_version ]]</th>
+                    <th>[[ texts.code_description ]]</th>
+                    <th>[[ texts.actions ]]</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(column, index) in newMasterColumns" :key="index">
+                    <td><input type="text" class="form-control" v-model="column.code"></td>
+                    <td><input type="text" class="form-control" v-model="column.name"></td>
+                    <td><input type="text" class="form-control" v-model="column.version"></td>
+                    <td><textarea class="form-control" v-model="column.description" rows="1" style="resize: both;"></textarea></td>
+                    <td>
+                      <!-- ★新規マスター用の削除メソッドを呼ぶ -->
+                      <button class="btn btn-danger btn-sm"
+                              type="button"
+                              @click="removeNewMasterRecord(index)">
+                        [[ texts.delete ]]
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button type="button" class="btn btn-secondary" @click="addColumn">
+                [[ texts.add_column ]]
+              </button>
+              <button type="submit" class="btn btn-primary ms-2">[[ texts.save ]]</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <hr>
+      
+      <!-- 既存マスター選択 -->
+      <div class="mb-3">
+        <label for="ledgerSelect" class="form-label">
+          [[ texts.select_existing_ledger ]]
+        </label>
+        <select v-model="selectedLedgerId"
+                @change="handleLedgerSelection"
+                class="form-select"
+                id="ledgerSelect">
+          <option disabled value="">
+            [[ texts.select_ledger_prompt ]]
+          </option>
+          <option v-for="master in masters"
+                  :key="String(master.master_id)"
+                  :value="String(master.master_id)">
+            [[ master.master_type ]] : [[ master.description ]]
+          </option>
+        </select>
+        <!--<button class="btn btn-secondary mt-3" @click="closeWindow">
+          [[ texts.close ]]
+        </button>-->
+      </div>
+
+      <!-- ▼▼▼ 既存マスター (Ledger) ▼▼▼ -->
+      <div v-if="selectedMaster && selectedMaster.master_type.trim().toLowerCase() === 'ledger'">
+        <!-- 台帳レコード選択リスト -->
+        <div class="mb-3">
+          <label for="ledgerRecordSelect" class="form-label">
+            [[ texts.select_ledger_record ]]
+          </label>
+          <select v-model="selectedLedgerRecordId"
+                  @change="handleLedgerRecordSelection"
+                  class="form-select"
+                  id="ledgerRecordSelect">
+            <option disabled value="">
+              [[ texts.select_ledger_record_prompt ]]
+            </option>
+            <option v-for="record in ledgerRecords"
+                    :key="record.id"
+                    :value="record.record_data.code">
+              [[ (record.record_data.name || record.record_data.code) || texts.unnamed ]]
+            </option>
+          </select>
+        </div>
+
+        <!-- Ledgerの場合：新規台帳追加用フォーム -->
+        <!--<div v-if="selectedLedgerRecordId === 'new'" class="mb-3">
+          <label for="newLedgerName" class="form-label">
+            [[ texts.ledger_name ]]
+          </label>
+          <input type="text"
+                 v-model="newLedgerName"
+                 class="form-control"
+                 id="newLedgerName"
+                 :placeholder="texts.ledger_name_placeholder">
+          <button class="btn btn-primary mt-2" @click="addNewLedgerRecord">
+            [[ texts.save ]]
+          </button>
+        </div>-->
+
+        <!-- Ledgerの場合：既存レコードの項目定義編集（入力フォーム） -->
+        <div v-if="selectedLedgerRecordId && selectedLedgerRecordId !== 'new' && selectedLedgerColumns.length > 0">
+          <h3>[[ texts.column_settings ]]</h3>
+          <table class="table table-bordered">
+            <thead class="table-blue-header">
+              <tr>
+                <th>[[ texts.column_name ]]</th>
+                <th>[[ texts.data_type ]]</th>
+                <th>[[ texts.max_length ]]</th>
+                <th>[[ texts.display_order ]]</th>
+                <th>[[ texts.actions ]]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(column, index) in selectedLedgerColumns" :key="column.id || index">
+                <!-- 項目名 -->
+                <td>
+                  <input type="text"
+                         v-model="column.field_name"
+                         class="form-control"
+                         :placeholder="texts.column_name_placeholder"
+                         required>
+                </td>
+                <!-- データ型 -->
+                <td>
+                  <select v-model="column.data_type" class="form-select">
+                    <option value="text">[[ texts.text ]]</option>
+                    <option value="number">[[ texts.number ]]</option>
+                    <option value="real">[[ texts.real ]]</option>
+                    <option value="date">[[ texts.date ]]</option>
+                  </select>
+                </td>
+                <!-- 最大文字数 -->
+                <td>
+                  <input type="number"
+                         v-model="column.max_length"
+                         class="form-control"
+                         min="1"
+                         :placeholder="texts.max_length_placeholder">
+                </td>
+                <!-- 表示順 -->
+                <td>
+                  <input type="number"
+                         v-model="column.display_order"
+                         class="form-control"
+                         min="1"
+                         :placeholder="texts.display_order_placeholder">
+                </td>
+                <!-- アクションボタン -->
+                <td>
+                  <template v-if="column.id">
+                    <!-- 既存項目の更新・削除 -->
+                    <button @click="updateField(column)" class="btn btn-primary btn-sm">
+                      [[ texts.update ]]
+                    </button>
+                    <button @click="deleteField(column.id, index)" class="btn btn-danger btn-sm">
+                      [[ texts.delete ]]
+                    </button>
+                  </template>
+                  <template v-else>
+                    <!-- 新規項目の保存・削除 -->
+                    <button @click="saveNewField(index)" class="btn btn-success btn-sm">
+                      [[ texts.save ]]
+                    </button>
+                    <button @click="deleteColumn(index)" class="btn btn-danger btn-sm">
+                      [[ texts.delete ]]
+                    </button>
+                  </template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button @click="addColumnToSelected" class="btn btn-secondary">
+            [[ texts.add_column ]]
+          </button>
+          <button @click="saveColumns" class="btn btn-primary ms-2">
+            [[ texts.save ]]
+          </button>
+        </div>
+      </div>
+      <!-- ▲▲▲ 既存マスター (Ledger) 表示ここまで ▲▲▲ -->
+
+      <!-- 非Ledgerの場合の既存レコード一覧表示 -->
+      <!-- 各レコード行にて、新規レコードなら「Save」ボタン、既存レコードなら「Update」ボタンを表示 -->
+      <div v-else-if="selectedMaster && selectedMaster.master_type.trim().toLowerCase() !== 'ledger'" class="mt-4">
+        <h3>[[ texts.registered_master ]] [[ selectedMaster.master_type ]]</h3>
+        
+        <table class="table table-bordered" v-if="existingRecords.length > 0">
+          <thead class="table-blue-header table-fixed-columns2">
+            <tr>
+              <th>[[ texts.code ]]</th>
+              <th>[[ texts.code_name ]]</th>
+              <th>[[ texts.code_version ]]</th>
+              <th>[[ texts.code_description ]]</th>
+              <th>[[ texts.actions ]]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(rec, idx) in existingRecords" :key="rec.id || idx">
+              <td>
+                <input type="text"
+                      class="form-control"
+                      v-model="rec.record_data.code">
+              </td>
+              <td>
+                <input type="text"
+                      class="form-control"
+                      v-model="rec.record_data.name">
+              </td>
+              <td>
+                <input type="text"
+                      class="form-control"
+                      v-model="rec.record_data.version">
+              </td>
+              <td>
+                <textarea class="form-control"
+                          v-model="rec.record_data.description"
+                          rows="1"
+                          style="resize: both;"></textarea>
+              </td>
+
+              <td>
+                <!-- 既存レコードか新規レコードかでボタンを切り替え -->
+                <template v-if="rec.id">
+                  <!-- 既存: Updateボタン -->
+                  <button class="btn btn-primary btn-sm"
+                          @click="updateExistingRecord(idx)">
+                    [[ texts.update ]]
+                  </button>
+                </template>
+                <template v-else>
+                  <!-- 新規: Saveボタン -->
+                  <button class="btn btn-success btn-sm"
+                          @click="saveNewExistingRecord(idx)">
+                    [[ texts.save ]]
+                  </button>
+                </template>
+
+                <!-- どちらでも Delete ボタンは出す -->
+                <button class="btn btn-danger btn-sm ms-2"
+                        @click="deleteRecord(idx)">
+                  [[ texts.delete ]]
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p v-else>[[ texts.no_records ]]</p>
+
+        <!-- レコード追加 -->
+        <button class="btn btn-secondary mt-2"
+                @click="addExistingNonLedgerRecord">
+          [[ texts.add_new_record ]]
+        </button>
+        <button class="btn btn-primary mt-2 ms-2" @click="saveNonLedgerRecords">
+          [[ texts.save ]]
+        </button>
+      </div>
+      <!-- ▲▲▲ 既存マスター (nonLedger) 表示ここまで ▲▲▲ -->
+
+      <!-- マスター一覧表示 --> 
+      <div id="mastersList" class="mt-5">
+        <h2>[[ texts.existing_ledger_masters ]]</h2>
+        <div v-for="master in masters" :key="String(master.master_id)" class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">
+              [[ master.master_type ]] : [[ master.description ]]
+            </h5>
+            <p class="card-text">
+              <strong>[[ texts.column_settings ]]:</strong>
+              <!-- Ledgerの場合 -->
+              <template v-if="master.master_type.trim().toLowerCase() === 'ledger'">
+                <template v-if="master.fields && master.fields.length > 0">
+                  <div v-for="(group, tag) in groupFieldsByTag(master.fields)"
+                       :key="tag"
+                       class="mb-2">
+                    <strong>[[ getLedgerNameByTag(master, tag) ]]</strong>:
+                    <span v-for="(col, idx) in group.sort((a, b) => a.display_order - b.display_order)"
+                          :key="col.field_name">
+                      [[ col.field_name ]] ([[ col.data_type ]])
+                      <span v-if="idx !== group.length - 1">, </span>
+                    </span>
+                  </div>
+                </template>
+                <template v-else>
+                  [[ texts.no_records ]]
+                </template>
+              </template>
+              <!-- 非Ledgerの場合 -->
+              <template v-else>
+                <template v-if="master.unified_master_records && master.unified_master_records.length > 0">
+                  <span v-for="(rec, idx) in master.unified_master_records" :key="rec.id">
+                    [[ getDisplayValue(rec) ]]
+                    <span v-if="idx !== master.unified_master_records.length - 1">, </span>
+                  </span>
+                </template>
+                <template v-else>
+                  -
+                </template>
+              </template>
+            </p>
+            <button @click="deleteMaster(master.master_id)"
+                    class="btn btn-danger btn-sm">
+              [[ texts.delete ]]
+            </button>
+          </div>
+        </div>
+        <!--<button class="btn btn-secondary mt-3" @click="closeWindow">
+          [[ texts.close ]]
+        </button>-->
+      </div>
+    </div>
+  </div>
+
+  <!-- スクリプト群 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- ヘッダー用スクリプト -->
+  <script src="/static/js/common/global.js"></script>
+  <script src="/static/js/common/texts.js"></script>
+  <script src="/static/js/common/header.js"></script>
+  <!-- 統合マスター管理用スクリプト -->
+  <script src="/static/js/modules/unified_master_manager.js"></script>
+</body>
+</html>

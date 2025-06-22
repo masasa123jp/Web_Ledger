@@ -1,0 +1,124 @@
+/* /frontend/report_dashboard/report_dashboard.css */
+
+/* 全体レイアウト */
+.container {
+  padding: 20px;
+}
+
+/* ヘッダーエリア */
+header {
+  margin-bottom: 20px;
+}
+
+/* フィルタパネル */
+.filter-panel {
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Handsontable コンテナ */
+#hotContainer {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+
+/* Chart.js キャンバス */
+canvas {
+  max-width: 100%;
+}
+
+/* テーブルパネル */
+.table-panel {
+  background-color: #ffffff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* サイドバーのスタイル */
+#sidebar-container {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  width: 300px;
+  height: calc(100vh - 60px);
+  background-color: #f8f9fa;
+  border-left: 1px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease-in-out;
+  z-index: 2000;
+}
+#aiSidebar {
+  width: 100%;
+}
+#aiSidebar:not(.open) {
+  transform: translateX(100%);
+}
+
+/* サイドバー内のチャット関連 */
+.ai-notice {
+  font-size: 0.9rem;
+  color: #856404;
+  background-color: #ffeeba;
+  padding: 5px;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+}
+#chat-history {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+.chat-message {
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  word-wrap: break-word;
+}
+.chat-user {
+  background-color: #e9f7ef;
+  text-align: right;
+}
+.chat-assistant {
+  background-color: #fcefe3;
+  text-align: left;
+}
+
+/* 付箋タブボタン */
+.sidebar-toggle {
+  position: fixed;
+  top: 40%;
+  right: 300px;
+  transform-origin: right center;
+  background-color: #333536;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  z-index: 2100;
+  transition: right 0.3s ease-in-out;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  #hotContainer {
+    height: 300px;
+  }
+  .filter-panel, .table-panel {
+    padding: 10px;
+  }
+  #sidebar-container {
+    width: 250px;
+  }
+  .sidebar-toggle {
+    right: 250px;
+  }
+}

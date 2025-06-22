@@ -1,0 +1,11 @@
+{
+  "sprint": "Sprint6",
+  "weeks": 10,
+  "milestones": [
+    "要件定義",
+    "DBスキーマ最適化",
+    "UI/UX改修",
+    "AI/ML統合",
+    "テストとCI/CD"
+  ]
+}

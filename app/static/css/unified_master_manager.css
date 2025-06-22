@@ -1,0 +1,122 @@
+/* 全体レイアウト */
+#unifiedMasterApp {
+  padding: 20px;
+}
+
+/* ナビゲーションバーの調整 */
+/* --- ヘッダー専用スタイルの上書き --- */
+/* ヘッダーを画面上部に固定 */
+#unifiedMasterApp .navbar {
+  margin: 0;              /* 余計な余白を削除 */
+  padding: 10px 20px;     /* 内側の余白はお好みで調整 */
+  position: fixed;        /* 固定表示 */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+}
+
+/* ヘッダーの下にコンテンツが隠れないように body に上部余白を追加 */
+#unifiedMasterApp body {
+  padding-top: 60px; /* ヘッダーの高さに合わせて調整 */
+}
+/* フォームおよびカードのスタイル */
+#unifiedMasterApp .card {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* テーブルのスタイル */
+#unifiedMasterApp table {
+  width: 100%;
+  margin-top: 15px;
+}
+#unifiedMasterApp table th {
+  background-color: var(--primary-color, #4a1e1e);
+  color: #fff;
+  text-align: center;
+}
+#unifiedMasterApp table td {
+  vertical-align: middle;
+}
+
+/* 入力フォームの調整 */
+#unifiedMasterApp .form-control,
+#unifiedMasterApp .form-select {
+  font-size: 1rem;
+  padding: 8px;
+}
+
+/* ボタンの統一 */
+#unifiedMasterApp .btn {
+  font-size: 1rem;
+}
+
+/* テーブルの固定列幅を設定するクラス */
+.table-fixed-columns th:nth-child(1),
+.table-fixed-columns td:nth-child(1) {
+  width: 10%;
+}
+.table-fixed-columns th:nth-child(2),
+.table-fixed-columns td:nth-child(2) {
+  width: 20%;
+}
+.table-fixed-columns th:nth-child(3),
+.table-fixed-columns td:nth-child(3) {
+  width: 10%;
+}
+.table-fixed-columns th:nth-child(4),
+.table-fixed-columns td:nth-child(4) {
+  width: 53%;
+}
+.table-fixed-columns th:nth-child(5),
+.table-fixed-columns td:nth-child(5) {
+  width: 7%;
+}
+.table-fixed-columns td:nth-child(5) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-fixed-columns2 th:nth-child(1),
+.table-fixed-columns2 td:nth-child(1) {
+  width: 10%;
+}
+.table-fixed-columns2 th:nth-child(2),
+.table-fixed-columns2 td:nth-child(2) {
+  width: 20%;
+}
+.table-fixed-columns2 th:nth-child(3),
+.table-fixed-columns2 td:nth-child(3) {
+  width: 10%;
+}
+.table-fixed-columns2 th:nth-child(4),
+.table-fixed-columns2 td:nth-child(4) {
+  width: 47%;
+}
+.table-fixed-columns2 th:nth-child(5),
+.table-fixed-columns2 td:nth-child(5) {
+  width: 13%;
+}
+.table-fixed-columns2 td:nth-child(5) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  #unifiedMasterApp {
+    padding: 10px;
+  }
+  #unifiedMasterApp .navbar-brand {
+    font-size: 1.2rem;
+  }
+  #unifiedMasterApp .form-control,
+  #unifiedMasterApp .form-select {
+    font-size: 0.9rem;
+  }
+}
+

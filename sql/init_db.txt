@@ -1,0 +1,22 @@
+@echo off
+REM init_db.bat : DB初期化を順に実行する完全版
+
+REM --- パスワード設定 ---
+REM PostgreSQLのスーパーユーザー（postgres）のパスワード
+REM set PGPASSWORD=XXXXXXXXXX
+REM web_ledger用ユーザーのパスワード
+REM set WEB_LEDGER_PGPASSWORD=XXXXXXXXX
+
+echo === Creating Database and User ===
+psql -U postgres -f .\create_db.sql >> 20250308_01.txt 2>> 20250308_01_error.txt
+
+echo === Creating Tables for web_ledger ===
+REM web_ledger用ユーザーのパスワードを環境変数 PGPASSWORD に一時設定
+set PGPASSWORD=%WEB_LEDGER_PGPASSWORD%
+psql -U mydbuser -d web_ledger -c "SET search_path TO web_ledger, public;" -f .\postgres_ddl.sql >> 20250308_02.txt 2>> 20250308_02_error.txt
+
+echo === Inserting Sample Data ===
+psql -U mydbuser -d web_ledger -c "SET search_path TO web_ledger, public;" -f .\postgres_inserts.sql >> 20250308_03.txt 2>> 20250308_03_error.txt
+
+echo All done.
+pause

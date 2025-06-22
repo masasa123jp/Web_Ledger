@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ピボットテーブル分析</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSSライブラリ -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <!-- orb の CSS -->
+  <link rel="stylesheet" href="/static/css/lib/orb.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- 共通CSS -->
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <style>
+    .control-panel { margin-bottom: 15px; }
+    .control-container {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .control-container label { margin-bottom: 0; }
+    .header-area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    /* ピボットグリッド用コンテナ (#output) の最低高さを設定 */
+    #output {
+      min-height: 800px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    /* 追加CSS */
+    .fld-btn {
+      white-space: nowrap;
+    }
+    .orb .inner-table.upper-buttons {
+      table-layout: fixed;
+    }
+    .orb .av-flds {
+      overflow-x: auto;
+    }
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      background: #ebf7e7;
+      border: 1px solid #9fda8b;
+    }
+    ::-webkit-scrollbar-thumb:active {
+      border-radius: 3px;
+      background: #9fda8b;
+    }
+  </style>
+</head>
+<body>
+  <!-- Vue 管理下の領域 -->
+  <div id="app">
+    <!-- ヘッダーコンポーネント -->
+    <app-header 
+      :texts="headerTexts" 
+      @toggle-language="toggleLanguage" 
+      @logout-success="handleLogoutSuccess">
+    </app-header>
+
+    <div class="control-panel">
+      <div class="container mt-4">
+        <div class="header-area">
+          <h1 class="mb-0">ピボット分析</h1>
+          <div class="control-container">
+            <label>
+              台帳選択:
+              <select id="ledgerSelect" class="form-select form-select-sm">
+                <option value="">台帳を選択してください</option>
+              </select>
+            </label>
+            <label>
+              表示モード:
+              <select id="displayMode" class="form-select form-select-sm">
+                <option value="hierarchical">階層表示</option>
+                <option value="flat">水平フラット</option>
+              </select>
+            </label>
+            <label>
+              ラベル表示:
+              <select id="labelRepeat" class="form-select form-select-sm">
+                <option value="consolidate">まとめる</option>
+                <option value="repeat">繰り返す</option>
+              </select>
+            </label>
+            <button id="saveSettings" class="btn btn-primary btn-sm">設定を保存</button>
+          </div>
+        </div>
+        <div id="output" class="mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スクリプトは body の末尾にまとめて配置 -->
+  <!-- jQuery, jQuery UI -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <!-- React → orb.min.js の順で読み込み -->
+  <script src="/static/js/lib/react-0.12.2.min.js"></script>
+  <script src="/static/js/lib/orb.min.js"></script>
+  <!-- Bootstrap, Vue, axios -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- グローバルスクリプト -->
+  <script src="/static/js/common/global.js"></script>
+  <script src="/static/js/common/texts.js"></script>
+  <script src="/static/js/common/header.js"></script>
+
+  <!-- Vue インスタンスの作成 -->
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        currentLang: 'ja',
+        headerTexts: window.headerTextsJa
+      },
+      methods: {
+        toggleLanguage() {
+          if (this.currentLang === 'ja') {
+            this.currentLang = 'en';
+            this.headerTexts = window.headerTextsEn;
+          } else {
+            this.currentLang = 'ja';
+            this.headerTexts = window.headerTextsJa;
+          }
+        },
+        handleLogoutSuccess() {
+          window.location.href = '/login.html';
+        }
+      },
+      mounted() {
+        console.log("Vue インスタンス mounted");
+      }
+    });
+  </script>
+
+  <!-- pivot.js -->
+  <script src="/static/js/modules/pivot.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+project-root/
+├── config.py                       # システム全体の設定（環境変数、各種オプション）
+├── main.py                         # アプリケーションエントリーポイント（Flaskアプリケーションの生成とBlueprint登録）
+├── meta.txt                        # プロジェクトメタ情報
+├── requirements.txt                # パッケージ依存関係一覧
+├── sql/                            # DB設計資料、DDLスクリプト、サンプルデータなど
+│   ├── create_db.sql
+│   ├── ER_Diagram02.md
+│   ├── init_db.txt
+│   ├── postgres_ddl.sql
+│   ├── postgres_inserts.sql
+│   ├── postgres_inserts2.sql
+│   └── postgres_sequence_update.sql
+│
+├── backend/
+│   ├── api_util/                   # 共通ユーティリティ（DB接続プール管理、入力検証、パラメータ化クエリなど）
+│   │   └── api_util.py
+│   │
+│   ├── auth/                       # 認証・ユーザー管理 API
+│   │   ├── auth_api.py             # ログイン／ログアウト等の認証API
+│   │   └── user_management.py      # ユーザー作成、更新、削除などのユーザー管理ロジック
+│   │
+│   ├── master_management/          # 統合マスター管理（台帳マスター、項目定義）の API と業務ロジック
+│   │   ├── master_management_api.py  # マスター情報の CRUD を提供するAPIエンドポイント
+│   │   ├── master_field_service.py   # マスター項目定義の検証・管理ロジック
+│   │   └── dynamic_ledger_definition.py  # 動的台帳定義（フォーム生成支援等）の補助機能
+│   │
+│   ├── ledger_transaction/         # 台帳レコードの操作に関する処理
+│   │   ├── ledger_manager.py       # 台帳レコードの CRUD 処理（追加、更新、削除）
+│   │   ├── ledger_history.py       # 台帳更新履歴の管理
+│   │   └── audit_logs.py           # 監査ログ（変更履歴）の記録
+│   │
+│   ├── excel_import/               # Excelから台帳レコードをインポートする処理
+│   │   └── excel_importer.py
+│   │
+│   ├── report_dashboard/           # レポート生成・エクスポート機能
+│   │   ├── report_controller.py    # ユーザー指定フィルタ等でレポートデータを取得するAPI
+│   │   ├── report_generator.py     # レポート生成ロジック（集計、グラフ作成）
+│   │   └── export_utils.py         # レポートデータのエクスポート（CSV、Excel、PDF等）
+│   │
+│   ├── ai/                         # 生成AI関連機能の統合モジュール
+│   │   └── ai_service.py           # 生成AIチャット、OpenAI API呼び出し、台帳分析 (AIAgent, analyze_ledgers_sample) を提供
+│   │
+│   ├── performance_optimization/   # パフォーマンス最適化および非同期タスク管理
+│   │   ├── query_optimizer.py      # SQLクエリ実行の時間計測、キャッシュ利用（Redis）による最適化
+│   │   ├── response_time_logger.py # APIレスポンス時間をログ出力するデコレーター
+│   │   ├── async_task_manager.py   # Celeryを用いた非同期タスク処理
+│   │   ├── async_task_controller.py# 非同期タスクの起動と状態確認用API
+│   │   └── cache_manager.py        # Redisを用いたキャッシュ管理モジュール
+│   │
+│   ├── version_info/               # バージョン履歴の管理・取得
+│   │   └── version_info_api.py     # バージョン履歴取得のAPIエンドポイント
+│   │
+│   └── manual/                     # マニュアルの管理（取得、更新）
+│       └── manual_api.py           # マニュアル取得・更新用APIエンドポイント
+│
+└── frontend/
+    ├── index/                      # トップページ
+    │   ├── index.html
+    │   └── index.js
+    │
+    ├── dashboard/                  # ダッシュボード画面（レポート、統計情報）
+    │   ├── dashboard.html
+    │   ├── dashboard.css
+    │   └── dashboard.js
+    │
+    ├── ledger_manager/            # 帳票マスター整備画面（台帳マスター管理）
+    │   ├── ledger_manager.html
+    │   ├── ledger_manager.css
+    │   └── ledger_manager.js
+    │
+    ├── user_management/            # ユーザー管理画面
+    │   ├── user_management.html
+    │   ├── user_management.css
+    │   └── user_management.js
+    │
+    ├── manual/                    # マニュアル画面
+    │   ├── manual.html
+    │   ├── manual.css
+    │   └── manual.js
+    │
+    ├── version_info/              # バージョン情報画面
+    │   ├── version_info.html
+    │   ├── version_info.css
+    │   └── version_info.js
+    │
+    ├── ai/                        # 生成AIチャット画面
+    │   ├── ai.html
+    │   ├── ai.css
+    │   └── ai.js
+    │
+    ├── pivot/                     # ピボットテーブル分析画面
+    │   ├── pivot.html
+    │   ├── pivot.css
+    │   └── pivot.js
+    │
+    └── report_dashboard_ui/       # レポートダッシュボード画面
+        ├── dashboard.html
+        ├── dashboard.css
+        └── dashboard.js

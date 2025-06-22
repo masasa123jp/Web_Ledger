@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>台帳入力フォーム - Web台帳管理システム</title>
+  <!-- Bootstrap CSS (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 共通スタイルシート -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Optional: 台帳専用スタイル（必要に応じて有効化） -->
+  <!--<link rel="stylesheet" href="/ledger_form/ledger_form.css">-->
+  <!-- 生成AIチャットサイドバー用スタイル -->
+  <style>
+    /* 生成AIチャットサイドバー */
+    #aiSidebar {
+      position: fixed;
+      right: 0;
+      top: 60px; /* navバー下部 */
+      width: 300px;
+      height: calc(100vh - 60px);
+      background-color: #f8f9fa;
+      border-left: 1px solid #ccc;
+      padding: 10px;
+      overflow-y: auto;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease-in-out;
+      z-index: 2000;
+      transform: translateX(0);
+    }
+    #aiSidebar:not(.open) {
+      transform: translateX(100%);
+    }
+    /* 付箋タブボタン（サイドバーの左外部に固定） */
+    .sidebar-toggle {
+      position: fixed;
+      top: 40%; /* 縦中央 */
+      right: 300px;
+      transform-origin: right center;
+      background-color: #333536;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      z-index: 2100;
+      transition: right 0.3s ease-in-out;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+    }
+  </style>
+</head>
+<body>
+  <!-- Vue アプリケーションのルートコンテナ -->
+  <div id="ledger-form-app"></div>
+
+  <!-- スクリプト読み込み（defer 指定により DOM 構築後に実行） -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+  <script src="/static/js/common/global.js" defer></script>
+  <script src="/static/js/common/texts.js" defer></script>
+  <script src="/static/js/common/header.js" defer></script>
+  <script src="/static/js/modules/ledger_form.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+</body>
+</html>

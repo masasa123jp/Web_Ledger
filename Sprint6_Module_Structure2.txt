@@ -1,0 +1,86 @@
+project-root/
+├── config.py                      # 設定情報（環境変数、デフォルト値など）
+├── main.py                        # アプリケーションエントリポイント（Flaskアプリファクトリー利用）
+├── manual.md                    # オンラインマニュアル（ドキュメントとしての保持）
+├── meta.txt                       # プロジェクトメタ情報
+├── requirements.txt               # パッケージ依存関係
+├── sql/                           # DB設計資料・DDL、サンプルデータ挿入SQL等（維持）
+│   ├── create_db.sql
+│   ├── ER_Diagram02.md
+│   ├── init_db.txt
+│   ├── postgres_ddl.sql
+│   ├── postgres_inserts.sql
+│   ├── postgres_inserts2.sql
+│   └── postgres_sequence_update.sql
+│
+├── backend/
+│   ├── auth/
+│   │   ├── auth_api.py            # ユーザー認証・セッション管理 API
+│   │   └── user_management.py     # ユーザー・ロール管理（ユーザー管理画面と連携）
+│   │
+│   ├── master_management/
+│   │   ├── master_management_api.py  # 統合マスター管理 API（マスター情報の CRUD）
+│   │   ├── master_field_service.py   # マスター項目定義の検証・管理ロジック
+│   │   └── dynamic_ledger_definition.py# 台帳定義取得＆動的フォーム生成支援
+│   │
+│   ├── ledger_transaction/
+│   │   ├── ledger_manager.py      # 台帳レコードの CRUD 処理
+│   │   ├── ledger_history.py      # 台帳更新履歴の記録・取得
+│   │   └── audit_logs.py          # 監査ログの記録・取得
+│   │
+│   ├── excel_import/
+│   │   └── excel_importer.py      # Excelからのデータインポート処理
+│   │
+│   ├── report_dashboard/
+│   │   ├── report_controller.py   # レポートデータ取得 API
+│   │   ├── report_generator.py    # 台帳データ集計・分析レポート生成
+│   │   └── export_utils.py        # レポートデータのエクスポート（CSV, Excel, PDF 等）
+│   │
+│   ├── ai_ml_integration/
+│   │   └── ai_ml_integration.py   # 生成AIプロンプト最適化＆ML予測統合
+│   │
+│   ├── performance_optimization/
+│   │   ├── async_task_manager.py  # 非同期タスク管理（Celery等利用）
+│   │   ├── cache_manager.py       # キャッシュ管理（Redis等利用）
+│   │   ├── query_optimizer.py     # SQLクエリ最適化支援
+│   │   └── response_time_logger.py# APIレスポンス時間のログ記録
+│   │
+│   ├── api_util/
+│   │   └── api_util.py            # 共通ユーティリティ（入力検証、DB接続プール管理等）
+│   │
+│   ├── version_info/              # バージョン情報画面用 API モジュール
+│   │   └── version_info_api.py    # バージョン情報、更新履歴取得エンドポイント
+│   │
+│   └── manual/                    # マニュアル画面用 API モジュール
+│       └── manual_api.py          # マニュアルコンテンツ取得・更新エンドポイント
+│
+└── frontend/
+    ├── index.html                 # トップページ：エントリーポイント、ログイン＆概要表示
+    ├── dashboard/                 # ダッシュボード専用画面
+    │   ├── dashboard.html         # 主にレポート・統計情報・ウィジェットを表示
+    │   ├── dashboard.css          # ダッシュボード用スタイル
+    │   └── dashboard.js           # ダッシュボード用インタラクション処理
+    ├── ledger_form/
+    │   ├── ledger_form.html       # 台帳入力フォーム専用画面
+    │   ├── style.css              # 台帳入力フォーム用スタイル（共通スタイルの一部を継承）
+    │   └── script.js              # 台帳入力フォーム生成・送信処理
+    ├── user_management/           # ユーザー管理専用画面
+    │   ├── user_management.html   # ユーザー一覧・編集・追加用画面
+    │   ├── user_management.css    # ユーザー管理用スタイル
+    │   └── user_management.js     # ユーザー管理 API 連携処理
+    ├── manual/                    # マニュアル専用画面
+    │   ├── manual.html            # オンラインマニュアル閲覧・更新用画面
+    │   ├── manual.css             # マニュアル用スタイル
+    │   └── manual.js              # マニュアル取得・更新連携処理
+    ├── version_info/              # バージョン情報専用画面
+    │   ├── version_info.html      # バージョン情報・更新履歴表示用画面
+    │   ├── version_info.css       # バージョン情報用スタイル
+    │   └── version_info.js        # バージョン情報取得＆表示処理
+    ├── ai/                        # 生成AI利用専用画面
+    │   ├── ai.html                # 生成AIチャット画面
+    │   ├── ai.css                 # 生成AI画面用スタイル
+    │   └── ai.js                  # 生成AI API連携＆チャットUI処理
+    └── pivot/                     # ピボットテーブル専用画面
+        ├── pivot.html             # ピボットテーブル表示用 HTML
+        ├── pivot.css              # ピボットテーブル用スタイル（必要に応じて）
+        └── pivot.js               # ピボットテーブル生成・操作処理

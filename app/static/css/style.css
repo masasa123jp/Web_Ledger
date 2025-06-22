@@ -1,0 +1,392 @@
+/* ------------------------- */
+/* 基本の設定 */
+/* ------------------------- */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+.container {
+  max-width: 1920px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ------------------------- */
+/* ログインフォーム */
+/* ------------------------- */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ------------------------- */
+/* テーブル・ナビゲーションの基本スタイル */
+/* ------------------------- */
+.ledger-table  {
+  width: 100%;
+  margin-top: 20px;
+}
+/* ヘッダー行は固定 */
+.ledger-table  thead tr th {
+  position: sticky;
+  top: 0;
+  background-color: var(--primary-color, #4a1e1e);
+  color: #fff;
+}
+.navbar {
+  padding: 0.25rem 0;
+  position: relative;
+  z-index: 2000;
+}
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+
+/* モーダル背景 */
+.modal-backdrop {
+  z-index: 2040 !important;
+}
+
+/* モーダル本体 */
+.modal {
+  z-index: 2050 !important;
+}
+
+/* モーダルダイアログ（必要に応じて） */
+.modal-dialog {
+  z-index: 2060 !important;
+}
+/* ------------------------- */
+/* カード、ボタン、フォーム */
+/* ------------------------- */
+.card {
+  border-radius: 15px;
+}
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.btn-outline-secondary,
+.btn-outline-light {
+  padding: 10px 20px;
+  font-size: 1rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* ------------------------- */
+/* 固定列（例: ログインフォームやテーブル内） */
+/* ------------------------- */
+.sticky-col {
+  position: sticky;
+  left: 0;
+  background-color: inherit;
+  z-index: 50;
+}
+
+/* ------------------------- */
+/* 共通の折り返し禁止ルール（テーブルセル用） */
+/* ------------------------- */
+/* テーブル内のセルは基本的に改行させない */
+.ledger-table  th,
+.ledger-table  td {
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ------------------------- */
+/* テーマ用CSS変数 */
+/* ------------------------- */
+:root {
+  --primary-color: #4a1e1e;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --text-color: #333;
+}
+.theme-dark {
+  --primary-color: #343a40;
+  --secondary-color: #6c757d;
+  --background-color: #212529;
+  --text-color: #f8f9fa;
+}
+.theme-light {
+  --primary-color: #4a1e1e;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --text-color: #333;
+}
+
+/* ------------------------- */
+/* その他共通スタイル */
+/* ------------------------- */
+.language-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--secondary-color);
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ------------------------- */
+/* ナビゲーションメニューの統一 */
+/* ------------------------- */
+.navbar {
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.menu {
+  display: flex;
+  gap: 20px;
+}
+
+.menu-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.menu-link:hover {
+  color: #ddd;
+}
+
+
+/* ======================================== */
+/* [追加] 台帳用テーブルの固定と折り返し禁止 */
+/* 台帳の実装部分では .ledger-table クラスを付与する前提 */
+/* ======================================== */
+
+/* 各セルの幅（例: 120px）と折り返し禁止は既に .ledger-table  セレクタに適用されるため、
+   ledger-table でも同様の設定とし、さらにセル幅固定を明示的に設定 */
+/* ------------------------- */
+/* テーブルヘッダーとフィルター行の固定 */
+/* ------------------------- */
+.ledger-table  thead tr:nth-child(1) th {
+  position: sticky;
+  top: 0;
+  height: 40px;
+  min-width: 100px;
+  white-space: nowrap;
+}
+.ledger-table  thead tr:nth-child(2) th {
+  position: sticky;
+  top: 35px;
+  min-width: 100px;
+  white-space: nowrap;
+}
+.ledger-table  th,
+.ledger-table  td {
+  min-width: 100px;
+}
+.ledger-table  th:nth-child(1),
+.ledger-table  td:nth-child(1) { 
+  position: sticky; 
+  left: 0;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(2),
+.ledger-table  td:nth-child(2) { 
+  position: sticky; 
+  left: 100px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(3),
+.ledger-table  td:nth-child(3) { 
+  position: sticky; 
+  left: 200px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(4),
+.ledger-table  td:nth-child(4) { 
+  position: sticky; 
+  left: 300px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(5),
+.ledger-table  td:nth-child(5) { 
+  position: sticky; 
+  left: 400px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(6),
+.ledger-table  td:nth-child(6) { 
+  position: sticky; 
+  left: 500px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(7),
+.ledger-table  td:nth-child(7) { 
+  position: sticky; 
+  left: 600px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(8),
+.ledger-table  td:nth-child(8) { 
+  position: sticky; 
+  left: 700px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(9),
+.ledger-table  td:nth-child(9) { 
+  position: sticky; 
+  left: 800px;
+  background-color: inherit;
+}
+
+/* ヘッダー行の背景色設定 */
+.ledger-table  thead tr:nth-child(1) th:nth-child(-n+9) {
+  z-index: 50;
+  background-color: #4a1e1e;
+  color: #fff;
+}
+.ledger-table  thead tr:nth-child(1) th:nth-child(n+10) {
+  z-index: 30;
+  background-color: #6c757d;
+  color: #fff;
+}
+.ledger-table  thead tr:nth-child(2) th:nth-child(-n+9) {
+  z-index: 45;
+  background-color: #4a1e1e;
+  color: #fff;
+}
+.ledger-table  thead tr:nth-child(2) th:nth-child(n+10) {
+  z-index: 25;
+  background-color: #6c757d;
+  color: #fff;
+}
+
+/* ------------------------- */
+/* データ行の背景色（交互配色） */
+/* ------------------------- */
+.ledger-table  tbody tr:nth-child(odd) td {
+  background-color: #fdfdfe;
+}
+.ledger-table  tbody tr:nth-child(even) td {
+  background-color: #ffffff;
+}
+.table-responsive {
+  overflow-x: auto;
+  max-height: 820px;
+  width: 100%;
+}
+
+
+/* ※ 固定列の場合、背景色やz-indexは必要に応じて調整してください。 */
+/* ヘッダーのドロップダウントグルがアクティブな場合のスタイル */
+/* 通常の nav-link のスタイル（白文字で軽いテキストシャドウを付与） */
+/* 通常の nav-link のスタイル（白文字で軽いテキストシャドウを付与） */
+.navbar .nav-link {
+  color: #fff;
+}
+
+/* アクティブまたはフォーカス時の nav-link のスタイル（白背景、黒文字でくっきり表示） */
+/*.navbar .nav-link.active,
+.navbar .nav-link:focus,
+.navbar .nav-item.dropdown.show > .nav-link.dropdown-toggle {
+  background-color: #fff;
+  color: #000;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  text-shadow: none;
+}*/
+
+/* ドロップダウンメニュー内のアクティブな項目のスタイル */
+.navbar .dropdown-menu .dropdown-item.active,
+.navbar .dropdown-menu .dropdown-item:active {
+  background-color: #fff;
+  color: #000;
+  font-weight: bold;
+}
+
+/* 全体レイアウト */
+#unifiedMasterApp {
+  padding: 20px;
+}
+
+/* ナビゲーションバーの調整 */
+#unifiedMasterApp .navbar {
+  margin-bottom: 20px;
+}
+
+/* フォームおよびカードのスタイル */
+#unifiedMasterApp .card {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* テーブルのスタイル */
+#unifiedMasterApp table {
+  width: 100%;
+  margin-top: 15px;
+}
+#unifiedMasterApp table th {
+  background-color: var(--primary-color, #4a1e1e);
+  color: #fff;
+  text-align: center;
+}
+#unifiedMasterApp table td {
+  vertical-align: middle;
+}
+
+/* 入力フォームの調整 */
+#unifiedMasterApp .form-control,
+#unifiedMasterApp .form-select {
+  font-size: 1rem;
+  padding: 8px;
+}
+
+/* ボタンの統一 */
+#unifiedMasterApp .btn {
+  font-size: 1rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  #unifiedMasterApp {
+    padding: 10px;
+  }
+  #unifiedMasterApp .navbar-brand {
+    font-size: 1.2rem;
+  }
+  #unifiedMasterApp .form-control,
+  #unifiedMasterApp .form-select {
+    font-size: 0.9rem;
+  }
+}

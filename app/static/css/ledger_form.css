@@ -1,0 +1,275 @@
+/* ========================= */
+/* ledger_form.css - 独立版 */
+/* 外部 style.css の影響を排除するため、すべて #ledger-form-app を起点にし !important を活用 */
+/* ========================= */
+
+/* リセット＆基本設定 */
+#ledger-form-app * {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+#ledger-form-app {
+  font-family: Arial, sans-serif !important;
+  background-color: #f8f9fa !important;
+  color: #333 !important;
+}
+
+/* CSS変数 */
+#ledger-form-app:root {
+  --primary-color: #4a1e1e !important;
+  --secondary-color: #6c757d !important;
+  --header-font-color: #fff !important;
+  --cell-width: 120px !important;
+  --header-height: 40px !important;
+}
+
+/* スクロール可能な枠 */
+#ledger-form-app .table-responsive {
+  position: relative !important;
+  overflow-x: auto !important;
+  max-height: 820px !important;
+  width: 100% !important;
+  border: 1px solid #ccc !important;
+  margin-top: 20px !important;
+}
+
+/* 台帳専用テーブル */
+#ledger-form-app .ledger-table {
+  width: 100% !important;
+  margin-top: 20px !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+#ledger-form-app .ledger-table th,
+#ledger-form-app .ledger-table td {
+  width: var(--cell-width) !important;
+  min-width: var(--cell-width) !important;
+  padding: 5px !important;
+  border: 1px solid #ddd !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ヘッダー行固定（1行目） */
+#ledger-form-app .ledger-table thead tr:nth-child(1) th {
+  position: sticky !important;
+  top: 0 !important;
+  height: var(--header-height) !important;
+  background-color: #4a1e1e !important;
+  color: #fff !important;
+  z-index: 50 !important;
+}
+
+/* フィルター行固定（2行目） */
+#ledger-form-app .ledger-table thead tr:nth-child(2) th {
+  position: sticky !important;
+  top: 35px !important; /* ※参考サンプルでは35px、必要に応じて40pxに変更 */
+  height: var(--header-height) !important;
+  background-color: #6c757d !important;
+  color: #fff !important;
+  z-index: 45 !important;
+}
+
+/* 先頭9列の固定（固定対象：1～9列目） */
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(1),
+#ledger-form-app .ledger-table tbody tr td:nth-child(1) {
+  position: sticky !important;
+  left: 0 !important;
+  background: inherit !important;
+  z-index: 51 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(2),
+#ledger-form-app .ledger-table tbody tr td:nth-child(2) {
+  position: sticky !important;
+  left: 120px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(3),
+#ledger-form-app .ledger-table tbody tr td:nth-child(3) {
+  position: sticky !important;
+  left: 240px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(4),
+#ledger-form-app .ledger-table tbody tr td:nth-child(4) {
+  position: sticky !important;
+  left: 360px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(5),
+#ledger-form-app .ledger-table tbody tr td:nth-child(5) {
+  position: sticky !important;
+  left: 480px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(6),
+#ledger-form-app .ledger-table tbody tr td:nth-child(6) {
+  position: sticky !important;
+  left: 600px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(7),
+#ledger-form-app .ledger-table tbody tr td:nth-child(7) {
+  position: sticky !important;
+  left: 720px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(8),
+#ledger-form-app .ledger-table tbody tr td:nth-child(8) {
+  position: sticky !important;
+  left: 840px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+#ledger-form-app .ledger-table thead tr:nth-child(1) th:nth-child(9),
+#ledger-form-app .ledger-table tbody tr td:nth-child(9) {
+  position: sticky !important;
+  left: 960px !important;
+  background: inherit !important;
+  z-index: 50 !important;
+}
+
+/* データ行の交互配色 */
+#ledger-form-app .ledger-table tbody tr:nth-child(odd) td {
+  background-color: #fdfdfe !important;
+}
+#ledger-form-app .ledger-table tbody tr:nth-child(even) td {
+  background-color: #ffffff !important;
+}
+
+/* フィルター入力フィールド */
+#ledger-form-app .ledger-table thead tr:nth-child(2) th input {
+  width: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  color: inherit !important;
+  padding: 2px 4px !important;
+}
+
+/* ======================================== */
+/* [追加] 台帳用テーブルの固定と折り返し禁止 */
+/* 台帳の実装部分では .ledger-table クラスを付与する前提 */
+/* ======================================== */
+
+/* 各セルの幅（例: 120px）と折り返し禁止は既に .ledger-table  セレクタに適用されるため、
+   ledger-table でも同様の設定とし、さらにセル幅固定を明示的に設定 */
+/* ------------------------- */
+/* テーブルヘッダーとフィルター行の固定 */
+/* ------------------------- */
+.ledger-table  thead tr:nth-child(1) th {
+  position: sticky;
+  top: 0;
+  height: 40px;
+  min-width: 100px;
+  white-space: nowrap;
+}
+.ledger-table  thead tr:nth-child(2) th {
+  position: sticky;
+  top: 35px;
+  min-width: 100px;
+  white-space: nowrap;
+}
+.ledger-table  th,
+.ledger-table  td {
+  min-width: 100px;
+}
+.ledger-table  th:nth-child(1),
+.ledger-table  td:nth-child(1) { 
+  position: sticky; 
+  left: 0;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(2),
+.ledger-table  td:nth-child(2) { 
+  position: sticky; 
+  left: 100px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(3),
+.ledger-table  td:nth-child(3) { 
+  position: sticky; 
+  left: 200px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(4),
+.ledger-table  td:nth-child(4) { 
+  position: sticky; 
+  left: 300px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(5),
+.ledger-table  td:nth-child(5) { 
+  position: sticky; 
+  left: 400px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(6),
+.ledger-table  td:nth-child(6) { 
+  position: sticky; 
+  left: 500px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(7),
+.ledger-table  td:nth-child(7) { 
+  position: sticky; 
+  left: 600px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(8),
+.ledger-table  td:nth-child(8) { 
+  position: sticky; 
+  left: 700px;
+  background-color: inherit;
+}
+.ledger-table  th:nth-child(9),
+.ledger-table  td:nth-child(9) { 
+  position: sticky; 
+  left: 800px;
+  background-color: inherit;
+}
+
+/* ヘッダー行の背景色設定 */
+.ledger-table  thead tr:nth-child(1) th:nth-child(-n+9) {
+  z-index: 50;
+  background-color: #4a1e1e;
+  color: #fff;
+}
+.ledger-table  thead tr:nth-child(1) th:nth-child(n+10) {
+  z-index: 30;
+  background-color: #6c757d;
+  color: #fff;
+}
+.ledger-table  thead tr:nth-child(2) th:nth-child(-n+9) {
+  z-index: 45;
+  background-color: #4a1e1e;
+  color: #fff;
+}
+.ledger-table  thead tr:nth-child(2) th:nth-child(n+10) {
+  z-index: 25;
+  background-color: #6c757d;
+  color: #fff;
+}
+
+/* ------------------------- */
+/* データ行の背景色（交互配色） */
+/* ------------------------- */
+.ledger-table  tbody tr:nth-child(odd) td {
+  background-color: #fdfdfe;
+}
+.ledger-table  tbody tr:nth-child(even) td {
+  background-color: #ffffff;
+}
+.table-responsive {
+  overflow-x: auto;
+  max-height: 820px;
+  width: 100%;
+}

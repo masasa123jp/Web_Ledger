@@ -1,0 +1,70 @@
+<!-- templates/performance.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>パフォーマンス最適化・非同期タスク</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 共通スタイル -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    /* 必要に応じた追加スタイル */
+    body { padding: 20px; }
+    header { margin-bottom: 20px; }
+    main { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>パフォーマンステスト</h1>
+    <nav><a href="/">ホームに戻る</a></nav>
+  </header>
+  <main class="container">
+    <button id="startAsyncTask" class="btn btn-primary">非同期タスク開始</button>
+    <p>タスクID: <span id="taskId"></span></p>
+    <button id="checkTaskStatus" class="btn btn-secondary">タスク状態確認</button>
+    <pre id="taskResult" class="mt-3"></pre>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    var currentTaskId = null;
+    $(document).ready(function(){
+      $("#startAsyncTask").click(function(){
+        $.ajax({
+          url: "/api/async-task",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ numbers: [10, 20, 30, 40] }),
+          success: function(data){
+            currentTaskId = data.task_id;
+            $("#taskId").text(currentTaskId);
+          },
+          error: function(xhr){
+            alert("タスク開始エラー: " + xhr.responseText);
+          }
+        });
+      });
+      $("#checkTaskStatus").click(function(){
+        if (!currentTaskId) {
+          alert("タスクIDがありません。");
+          return;
+        }
+        $.ajax({
+          url: "/api/async-task/" + currentTaskId,
+          method: "GET",
+          success: function(data){
+            $("#taskResult").text(JSON.stringify(data, null, 2));
+          },
+          error: function(xhr){
+            alert("タスク状態確認エラー: " + xhr.responseText);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Report Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS (外部CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Handsontable CSS (外部CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+  <!-- 共通スタイル -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Report Dashboard専用スタイル -->
+  <link rel="stylesheet" href="/frontend/report_dashboard/report_dashboard.css">
+</head>
+<body>
+  <div id="reportDashboardApp" class="container my-4">
+    <!-- ヘッダー・ナビゲーション -->
+    <header class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Report Dashboard</h1>
+      <button class="btn btn-outline-secondary" @click="toggleLanguage">[[ texts.toggle_language ]]</button>
+    </header>
+
+    <!-- フィルタパネル（集計用） -->
+    <section class="filter-panel mb-4">
+      <div class="row">
+        <div class="col-md-4">
+          <label for="dateFrom" class="form-label">開始日</label>
+          <input type="date" id="dateFrom" v-model="filters.dateFrom" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label for="dateTo" class="form-label">終了日</label>
+          <input type="date" id="dateTo" v-model="filters.dateTo" class="form-control">
+        </div>
+        <div class="col-md-4 align-self-end">
+          <button class="btn btn-primary" @click="fetchReport">レポート更新</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 台帳データ表示（Handsontable） -->
+    <section class="mb-4">
+      <h3>台帳データ</h3>
+      <div id="hotContainer"></div>
+    </section>
+
+    <!-- グラフ表示エリア（Chart.js） -->
+    <section class="chart-panel mb-4">
+      <canvas id="reportChart"></canvas>
+    </section>
+
+    <!-- 集計データ一覧 -->
+    <section class="table-panel">
+      <h3>集計データ一覧</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>値</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(value, key) in reportData.summary" :key="key">
+            <td>[[ key ]]</td>
+            <td>[[ value ]]</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- サイドバー：生成AIチャット（ログイン済みの場合のみ表示） -->
+  <div id="sidebar-container" v-if="loggedIn">
+    <div id="aiSidebar" :class="{ open: isSidebarOpen }">
+      <!-- モデル選択 -->
+      <div class="mb-3">
+        <h5><label for="modelSelect" class="form-label">生成AIを利用して<br>台帳データの分析ができます。</label></h5>
+        <h4>
+          <label for="modelSelect" class="form-label">[[ texts.enter_ai_model ]]</label>
+        </h4>
+        <select id="modelSelect" v-model="selectedModel" class="form-select form-select-lg">
+          <option v-for="model in aiModels" :key="model.id" :value="model.name">[[ model.name ]]</option>
+        </select>
+      </div>
+      <!-- 注意文：AI応答は全角100文字以内に制限 -->
+      <div class="ai-notice mb-2">
+        ※AI応答は全角100文字以内に制限されています。
+      </div>
+      <!-- チャット履歴表示 -->
+      <div id="chat-history" class="d-flex flex-column">
+        <div v-for="(msg, index) in aiChatMessages" :key="index"
+             :class="['chat-message', msg.role === 'user' ? 'chat-user' : 'chat-assistant']">
+          [[ msg.content ]]
+        </div>
+      </div>
+      <!-- チャット入力エリア -->
+      <div id="chat-input-area" class="mt-2">
+        <textarea v-model="aiChatInput" class="form-control mb-2" rows="3" placeholder="メッセージを入力"></textarea>
+        <div class="d-flex">
+          <button class="btn btn-primary flex-grow-1" @click="sendAiChat">送信</button>
+          <button class="btn btn-secondary ms-2" @click="resetChat">リセット</button>
+        </div>
+      </div>
+    </div>
+    <!-- 付箋タブボタン -->
+    <button class="sidebar-toggle" @click="toggleSidebar" :style="toggleButtonStyle">
+      [[ isSidebarOpen ? '折りたたむ' : '生成AIチャット展開' ]]
+    </button>
+  </div>
+
+  <!-- 外部ライブラリ（CDN） -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hyperformula/dist/hyperformula.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Report Dashboard専用スクリプト -->
+  <script src="/frontend/report_dashboard/report_dashboard.js"></script>
+</body>
+</html>
